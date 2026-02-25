@@ -1,7 +1,7 @@
 import { Op } from "sequelize";
 import { Meeting } from "../module/meeting.model";
 
-  //  CREATE MEETING
+  //  crete meeting
 export const createMeeting = async (data: any) => {
   const { startTime, endTime, userId } = data;
 
@@ -24,7 +24,7 @@ export const createMeeting = async (data: any) => {
   return await Meeting.create(data);
 };
 
-  //  LIST MEETINGS (FILTERS)
+  //  list meeting
 
 export const listMeetings = async (query: any) => {
   const { userId, startDate, endDate } = query;
@@ -48,14 +48,14 @@ export const listMeetings = async (query: any) => {
   return await Meeting.findAll({ where });
 };
 
-  //  GET MEETING BY ID
+  //  get meeting
 
 export const getMeeting = async (id: number) => {
   return await Meeting.findByPk(id);
 };
 
 
-  //  UPDATE MEETING
+  //  Update meeting
 
 export const updateMeeting = async (id: number, data: any) => {
   const meeting = await Meeting.findByPk(id);
@@ -79,7 +79,7 @@ export const updateMeeting = async (id: number, data: any) => {
   const conflict = await Meeting.findOne({
     where: {
       userId,
-      id: { [Op.ne]: id }, // exclude current meeting
+      id: { [Op.ne]: id },
       startTime: { [Op.lt]: endTime },
       endTime: { [Op.gt]: startTime },
     },
@@ -93,7 +93,7 @@ export const updateMeeting = async (id: number, data: any) => {
   return meeting;
 };
 
-  //  DELETE MEETING
+  //  Delete meeting
 
 export const deleteMeeting = async (id: number) => {
   const meeting = await Meeting.findByPk(id);

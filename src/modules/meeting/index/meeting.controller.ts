@@ -2,18 +2,26 @@ import { Request, Response } from "express";
 import * as meetingService from "../service/meeting.service";
 
 // Creating Meeting below
-export const createMeeting = async (req: Request, res: Response) => {
+export const createMeeting = async (req: any, res: Response) => {
   try {
-    const meeting = await meetingService.createMeeting(req.body);
+    const userId = req.user.id;
+
+    const meeting = await meetingService.createMeeting({
+      ...req.body,
+      userId,
+    });
+    console.log("User from middleware:", req.user);
+
     return res.status(201).json(meeting);
   } catch (err: any) {
     return res.status(400).json({
       message: err.message || "Unable to create meeting",
     });
   }
+  
 };
 
-// LIST MEETINGS (with optional filters)
+// List meetings
 export const listMeetings = async (req: Request, res: Response) => {
   try {
     const meetings = await meetingService.listMeetings(req.query);
@@ -25,7 +33,7 @@ export const listMeetings = async (req: Request, res: Response) => {
   }
 };
 
-// GET MEETING BY ID
+// Get meetings
 export const getMeeting = async (req: Request, res: Response) => {
   try {
     const meeting = await meetingService.getMeeting(Number(req.params.id));
@@ -44,7 +52,7 @@ export const getMeeting = async (req: Request, res: Response) => {
   }
 };
 
-// UPDATE MEETING
+// Update meeting
 export const updateMeeting = async (req: Request, res: Response) => {
   try {
     const updatedMeeting = await meetingService.updateMeeting(
@@ -60,7 +68,7 @@ export const updateMeeting = async (req: Request, res: Response) => {
   }
 };
 
-// DELETE MEETING
+// Delete meeting
 export const deleteMeeting = async (req: Request, res: Response) => {
   try {
     await meetingService.deleteMeeting(Number(req.params.id));

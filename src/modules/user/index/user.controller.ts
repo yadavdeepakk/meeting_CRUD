@@ -11,7 +11,7 @@ export const createUser = async (req: Request, res: Response) => {
   }
 };
 
-// REGISTER
+// Register
 export const register = async (req: Request, res: Response) => {
   try {
     const result = await authService.registerUser(req.body);
@@ -21,7 +21,7 @@ export const register = async (req: Request, res: Response) => {
   }
 };
 
-// LOGIN
+// Login
 export const login = async (req: Request, res: Response) => {
   try {
     const result = await authService.loginUser(

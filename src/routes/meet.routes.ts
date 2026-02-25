@@ -1,6 +1,6 @@
 import { Router } from "express";
-import * as controller from "./meeting.controller";
-import { protect } from "../../../middlewares/auth.middleware";
+import * as controller from "../modules/meeting/index/meeting.controller";
+import { protect } from "../middlewares/auth.middleware";
 
 const router = Router();
 
