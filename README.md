@@ -43,18 +43,20 @@ The project follows a clean modular architecture: <br/>
 
 src/ <br/>
   config/        → Database configuration <br/>
-  middlewares/   → Error & validation middleware <br/>
   routes/        → Route registration <br/>
   modules/ <br/>
     user/ <br/>
-      index/     → Controllers <br/>
-      service/   → Business logic <br/>
-      module/    → Sequelize models <br/>
-    meeting/ <br/>
+       index/     → Controllers <br/>
+       service/   → Business logic <br/>
+       module/    → Sequelize models <br/> <br/>
+   meeting/ <br/>
       index/ <br/>
       service/ <br/>
       module/ <br/>
-Layer Responsibilities
+      dto/ <br/>
+      interface/ <br/>
+      
+<h3> Layer Responsibilities <h3/>
 
 Controller Layer → Handles HTTP requests/responses
 
