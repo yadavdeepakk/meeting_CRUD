@@ -1,110 +1,247 @@
-<h1> 📅 Meeting Scheduler Backend <h1/>
+<h1 align="center">Meeting Scheduler Backend API</h1>
 
-A backend service built using Node.js, TypeScript, Express, Sequelize, and PostgreSQL that allows users to schedule meetings while preventing overlapping time slots.
+<p align="center">
+A modular backend service built with Node.js, Express, TypeScript, Sequelize, and PostgreSQL.
+</p>
 
- <h3>🚀 Tech Stack </h3>
+<hr/>
 
- Node.js <br/>
-TypeScript <br/>
-Express <br/>
-Sequelize ORM <br/>
-PostgreSQL <br/>
+<h2>Overview</h2>
 
-📦 Installation & Setup <br/>
-1️⃣ Clone the repository <br/>
-git clone <your-repo-link> <br/>
-2️⃣ Install dependencies <br/>
-npm install <br/>
-3️⃣ Setup Environment Variables <br/>
+<p>
+This project is a backend service that allows users to schedule meetings while preventing overlapping time slots.
+</p>
 
-Create a .env file in the root directory: <br/>
+<p>
+It follows a clean modular architecture with separation of concerns between controllers, services, models, and routes. JWT authentication is implemented to secure meeting operations.
+</p>
 
-PORT=5000 <br/>
-DB_NAME=meeting_scheduler <br/>
-DB_USER=postgres <br/>
-DB_PASS=your_password <br/>
-DB_HOST=localhost <br/>
+<hr/>
 
-4️⃣ Setup PostgreSQL Database <br/>
+<h2>Tech Stack</h2>
 
-Open PostgreSQL and create a database:
+<ul>
+  <li>Node.js</li>
+  <li>Express.js</li>
+  <li>TypeScript</li>
+  <li>Sequelize ORM</li>
+  <li>PostgreSQL</li>
+  <li>JWT Authentication</li>
+  <li>Bcrypt (Password Hashing)</li>
+</ul>
 
-CREATE DATABASE meeting_scheduler;
-5️⃣ Run the project
-npm run dev
+<hr/>
 
-Server will run at:
+<h2>Project Structure</h2>
 
-http://localhost:5000
-<br/>
-🏗 Architecture Overview
+<pre>
+src/
+  config/
+  middlewares/
+  routes/
+  utils/
+  modules/
+    meeting/
+      index/
+      dto/
+      interface/
+      module/
+      service/
+    user/
+      index/
+      dto/
+      interface/
+      module/
+      service/
+  app.ts
+  server.ts
+</pre>
 
-The project follows a clean modular architecture: <br/>
+<p>
+Each module is self-contained and includes its controller (index), service layer, model definition, and data contracts.
+</p>
 
-src/ <br/>
-  config/        → Database configuration <br/>
-  routes/        → Route registration <br/>
-  modules/ <br/>
-    user/ <br/>
-       index/     → Controllers <br/>
-       service/   → Business logic <br/>
-       module/    → Sequelize models <br/> <br/>
-   meeting/ <br/>
-      index/ <br/>
-      service/ <br/>
-      module/ <br/>
-      dto/ <br/>
-      interface/ <br/>
-      
-<h3> Layer Responsibilities <h3/>
+<hr/>
 
-Controller Layer → Handles HTTP requests/responses
+<h2>Features</h2>
 
-Service Layer → Business logic & validation
+<ul>
+  <li>User Registration</li>
+  <li>User Login with JWT</li>
+  <li>Password Hashing with Bcrypt</li>
+  <li>Protected Routes using Middleware</li>
+  <li>Create, Update, Delete Meetings (Authenticated)</li>
+  <li>List and Get Meetings (Public)</li>
+  <li>Prevention of Overlapping Time Slots</li>
+</ul>
 
-Model Layer → Sequelize DB models
+<hr/>
 
-Routes Layer → Registers endpoints
+<h2>Business Rule</h2>
 
-📌 Business Rule (Important)
-❌ No Time Conflicts Allowed
+<p>
+A user cannot create or update a meeting if it overlaps with an existing meeting.
+</p>
 
-A user cannot create or update overlapping meetings.
+<p>
+Conflict condition:
+</p>
 
-Conflict Condition:
-existing.start < new.end
+<pre>
+existing.startTime &lt; new.endTime
 AND
-existing.end > new.start
+existing.endTime &gt; new.startTime
+</pre>
 
-If conflict exists:
+<p>
+If conflict exists, the API returns:
+</p>
 
+<pre>
 400 Bad Request
 {
   "message": "Time slot already booked"
 }
+</pre>
 
-This logic is implemented inside the service layer.
+<hr/>
 
-API Documentation
-User APIs
-Create User
+<h2>Authentication Flow</h2>
 
-✅ Assignment Requirements Covered
+<ol>
+  <li>User registers with name, email, and password.</li>
+  <li>Password is hashed using bcrypt.</li>
+  <li>User logs in and receives a JWT token.</li>
+  <li>Protected routes require Authorization header:</li>
+</ol>
 
-✔ Node.js + TypeScript
-✔ Sequelize ORM
-✔ PostgreSQL
-✔ Clean architecture
-✔ Business logic validation
-✔ No time conflicts
-✔ Update conflict validation
-✔ Date filtering
-✔ Proper HTTP status codes
+<pre>
+Authorization: Bearer &lt;your_token&gt;
+</pre>
 
-👨‍💻 Author
+<p>
+The middleware verifies the token and extracts the user ID securely.
+</p>
 
+<hr/>
+
+<h2>Getting Started</h2>
+
+<h3>1. Clone the Repository</h3>
+
+<pre>
+git clone https://github.com/your-username/your-repo-name.git
+cd your-repo-name
+</pre>
+
+<h3>2. Install Dependencies</h3>
+
+<pre>
+npm install
+</pre>
+
+<h3>3. Create .env File</h3>
+
+<p>Create a file named <strong>.env</strong> in the root directory and add:</p>
+
+<pre>
+PORT=5000
+DB_HOST=localhost
+DB_NAME=your_database_name
+DB_USER=your_database_user
+DB_PASS=your_database_password
+JWT_SECRET=your_secret_key
+</pre>
+
+<h3>4. Create PostgreSQL Database</h3>
+
+<p>Make sure PostgreSQL is installed and running.</p>
+
+<p>Create a new database:</p>
+
+<pre>
+CREATE DATABASE your_database_name;
+</pre>
+
+<h3>5. Run the Application</h3>
+
+<pre>
+npm run dev
+</pre>
+
+<p>The server will start at:</p>
+
+<pre>
+http://localhost:5000
+</pre>
+
+<hr/>
+
+<h2>API Endpoints</h2>
+
+<h3>User Routes</h3>
+
+<pre>
+POST   /users/register
+POST   /users/login
+</pre>
+
+<h3>Meeting Routes</h3>
+
+<pre>
+GET    /meetings
+GET    /meetings/:id
+POST   /meetings        (Protected)
+PUT    /meetings/:id    (Protected)
+DELETE /meetings/:id    (Protected)
+</pre>
+
+<hr/>
+
+<h2>Testing the API</h2>
+
+<p>You can use Thunder Client, Postman, or any REST client.</p>
+
+<h4>Example: Create Meeting</h4>
+
+<pre>
+POST /meetings
+Authorization: Bearer &lt;your_token&gt;
+
+{
+  "title": "Morning Meeting",
+  "startTime": "2026-02-25T09:00:00.000Z",
+  "endTime": "2026-02-25T10:00:00.000Z"
+}
+</pre>
+
+<hr/>
+
+<h2>Security Improvements</h2>
+
+<ul>
+  <li>JWT-based authentication</li>
+  <li>Password hashing with bcrypt</li>
+  <li>User ID extracted from token instead of request body</li>
+  <li>Protected modification routes</li>
+</ul>
+
+<hr/>
+
+<h2>Future Enhancements</h2>
+
+<ul>
+  <li>Pagination</li>
+  <li>Soft Delete</li>
+  <li>Rate Limiting</li>
+  <li>Logging</li>
+  <li>Unit Testing (Jest)</li>
+</ul>
+
+<hr/>
+
+<h2>Author</h2>
+
+<p>
 Deepak Kumar Yadav
-
-🚀 Project Status
-
-Backend service fully functional and tested using Thunder Client.
+</p>
