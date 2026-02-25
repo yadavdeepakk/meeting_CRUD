@@ -1,6 +1,6 @@
 import { DataTypes, Model } from "sequelize";
 import { sequelize } from "../../../config/database";
-import { User } from "../../users/module/user.module";
+import { User } from "../../user/module/user.module";
 
 export class Meeting extends Model {
   public id!: number;

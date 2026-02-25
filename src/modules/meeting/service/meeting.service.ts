@@ -1,9 +1,7 @@
 import { Op } from "sequelize";
 import { Meeting } from "../module/meeting.model";
 
-/* =========================
-   CREATE MEETING
-========================= */
+  //  CREATE MEETING
 export const createMeeting = async (data: any) => {
   const { startTime, endTime, userId } = data;
 
@@ -26,9 +24,8 @@ export const createMeeting = async (data: any) => {
   return await Meeting.create(data);
 };
 
-/* =========================
-   LIST MEETINGS (FILTERS)
-========================= */
+  //  LIST MEETINGS (FILTERS)
+
 export const listMeetings = async (query: any) => {
   const { userId, startDate, endDate } = query;
 
@@ -51,16 +48,15 @@ export const listMeetings = async (query: any) => {
   return await Meeting.findAll({ where });
 };
 
-/* =========================
-   GET MEETING BY ID
-========================= */
+  //  GET MEETING BY ID
+
 export const getMeeting = async (id: number) => {
   return await Meeting.findByPk(id);
 };
 
-/* =========================
-   UPDATE MEETING
-========================= */
+
+  //  UPDATE MEETING
+
 export const updateMeeting = async (id: number, data: any) => {
   const meeting = await Meeting.findByPk(id);
 
@@ -73,7 +69,7 @@ export const updateMeeting = async (id: number, data: any) => {
   const userId = meeting.get("userId") as number;
 
   if (!userId) {
-    throw new Error("Invalid meeting data: userId missing");
+    throw new Error('userId missing');
   }
 
   if (new Date(startTime) >= new Date(endTime)) {
@@ -90,16 +86,15 @@ export const updateMeeting = async (id: number, data: any) => {
   });
 
   if (conflict) {
-    throw new Error("Time slot already booked");
+    throw new Error("slot already booked");
   }
 
   await meeting.update(data);
   return meeting;
 };
 
-/* =========================
-   DELETE MEETING
-========================= */
+  //  DELETE MEETING
+
 export const deleteMeeting = async (id: number) => {
   const meeting = await Meeting.findByPk(id);
 

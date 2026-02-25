@@ -1,6 +1,6 @@
 import { Router } from "express";
-import userRoutes from "../modules/users/index/user.routes";
-import meetingRoutes from "../modules/meetings/index/meet.routes";
+import userRoutes from "../modules/user/index/user.routes";
+import meetingRoutes from "../modules/meeting/index/meet.routes";
 
 const router = Router();
 

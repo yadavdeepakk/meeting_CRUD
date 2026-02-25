@@ -1,14 +1,14 @@
 import { Request, Response } from "express";
 import * as meetingService from "../service/meeting.service";
 
-// CREATE MEETING
+// Creating Meeting below
 export const createMeeting = async (req: Request, res: Response) => {
   try {
     const meeting = await meetingService.createMeeting(req.body);
     return res.status(201).json(meeting);
-  } catch (error: any) {
+  } catch (err: any) {
     return res.status(400).json({
-      message: error.message || "Failed to create meeting",
+      message: err.message || "Unable to create meeting",
     });
   }
 };

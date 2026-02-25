@@ -3,7 +3,7 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 if (!process.env.DB_NAME || !process.env.DB_USER || !process.env.DB_HOST) {
-  throw new Error("Database environment variables missing");
+  throw new Error("database env variables missing");
 }
 
 export const sequelize = new Sequelize(
