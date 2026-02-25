@@ -1,12 +1,16 @@
 import { Router } from "express";
 import * as controller from "./meeting.controller";
+import { protect } from "../../../middlewares/auth.middleware";
 
 const router = Router();
 
-router.post("/", controller.createMeeting);
+//public routes
 router.get("/", controller.listMeetings);
 router.get("/:id", controller.getMeeting);
-router.put("/:id", controller.updateMeeting);
-router.delete("/:id", controller.deleteMeeting);
+
+// protected routes
+router.post("/", protect, controller.createMeeting);
+router.put("/:id", protect, controller.updateMeeting);
+router.delete("/:id", protect, controller.deleteMeeting);
 
 export default router;
