@@ -88,3 +88,23 @@ This logic is implemented inside the service layer.
 API Documentation
 User APIs
 Create User
+
+✅ Assignment Requirements Covered
+
+✔ Node.js + TypeScript
+✔ Sequelize ORM
+✔ PostgreSQL
+✔ Clean architecture
+✔ Business logic validation
+✔ No time conflicts
+✔ Update conflict validation
+✔ Date filtering
+✔ Proper HTTP status codes
+
+👨‍💻 Author
+
+Deepak Kumar Yadav
+
+🚀 Project Status
+
+Backend service fully functional and tested using Thunder Client.
