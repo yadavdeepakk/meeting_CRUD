@@ -49,14 +49,12 @@ export const listMeetings = async (query: any) => {
 };
 
   //  get meeting
-
 export const getMeeting = async (id: number) => {
   return await Meeting.findByPk(id);
 };
 
 
   //  Update meeting
-
 export const updateMeeting = async (id: number, data: any) => {
   const meeting = await Meeting.findByPk(id);
 
@@ -102,5 +100,5 @@ export const deleteMeeting = async (id: number) => {
     throw new Error("Meeting not found");
   }
 
-  await meeting.destroy();
+  await meeting.destroy(); 
 };

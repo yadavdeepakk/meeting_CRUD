@@ -10,7 +10,6 @@ export const createMeeting = async (req: any, res: Response) => {
       ...req.body,
       userId,
     });
-    console.log("User from middleware:", req.user);
 
     return res.status(201).json(meeting);
   } catch (err: any) {
