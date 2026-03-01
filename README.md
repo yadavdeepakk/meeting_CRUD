@@ -6,19 +6,21 @@ A modular backend service built with Node.js, Express, TypeScript, Sequelize, an
 
 <hr/>
 
-<h2>Overview</h2>
+<h2>1. Overview</h2>
 
 <p>
 This project is a backend service that allows users to schedule meetings while preventing overlapping time slots.
+The system enforces strict business rules to ensure no user can create or update meetings that conflict with existing bookings.
 </p>
 
 <p>
-It follows a clean modular architecture with separation of concerns between controllers, services, models, and routes. JWT authentication is implemented to secure meeting operations.
+The application follows a modular architecture with clear separation between controllers, services, models, and routes.
+JWT authentication is implemented to secure meeting creation, updates, and deletion.
 </p>
 
 <hr/>
 
-<h2>Tech Stack</h2>
+<h2>2. Tech Stack</h2>
 
 <ul>
   <li>Node.js</li>
@@ -32,7 +34,85 @@ It follows a clean modular architecture with separation of concerns between cont
 
 <hr/>
 
-<h2>Project Structure</h2>
+<h2>3. Setup and Installation</h2>
+
+<h3>3.1 Clone Repository</h3>
+
+<pre>
+git clone https://github.com/your-username/your-repo-name.git
+cd your-repo-name
+</pre>
+
+<h3>3.2 Install Dependencies</h3>
+
+<pre>
+npm install
+</pre>
+
+<h3>3.3 Environment Setup</h3>
+
+<p>Create a <strong>.env</strong> file in the root directory:</p>
+
+<pre>
+PORT=5000
+
+DB_HOST=localhost
+DB_NAME=your_database_name
+DB_USER=your_database_user
+DB_PASS=your_database_password
+
+JWT_SECRET=your_secret_key
+</pre>
+
+<h3>3.4 Database Setup</h3>
+
+<p>Ensure PostgreSQL is installed and running.</p>
+
+<p>Create a database:</p>
+
+<pre>
+CREATE DATABASE your_database_name;
+</pre>
+
+<hr/>
+
+<h2>4. Migration and Run Commands</h2>
+
+<p>
+This project uses Sequelize for ORM and schema synchronization.
+</p>
+
+<h3>4.1 Development Sync</h3>
+
+<p>
+During development, <code>sequelize.sync()</code> is used to automatically create tables if they do not exist.
+</p>
+
+<pre>
+npm run dev
+</pre>
+
+<p>
+If schema changes are made and tables need to be recreated, use:
+</p>
+
+<pre>
+sequelize.sync({ force: true })
+</pre>
+
+<p>
+Note: This will drop and recreate tables. It should only be used in development.
+</p>
+
+<h3>4.2 Production Recommendation</h3>
+
+<p>
+In a production environment, proper migrations should be used instead of force sync.
+</p>
+
+<hr/>
+
+<h2>5. Architecture and Module Design</h2>
 
 <pre>
 src/
@@ -57,31 +137,70 @@ src/
   server.ts
 </pre>
 
-<p>
-Each module is self-contained and includes its controller (index), service layer, model definition, and data contracts.
-</p>
-
-<hr/>
-
-<h2>Features</h2>
+<h3>5.1 Architectural Principles</h3>
 
 <ul>
-  <li>User Registration</li>
-  <li>User Login with JWT</li>
-  <li>Password Hashing with Bcrypt</li>
-  <li>Protected Routes using Middleware</li>
-  <li>Create, Update, Delete Meetings (Authenticated)</li>
-  <li>List and Get Meetings (Public)</li>
-  <li>Prevention of Overlapping Time Slots</li>
+  <li><strong>Controller Layer:</strong> Handles HTTP request/response.</li>
+  <li><strong>Service Layer:</strong> Contains business logic and validation.</li>
+  <li><strong>Model Layer:</strong> Defines database schema using Sequelize.</li>
+  <li><strong>Routes:</strong> Maps endpoints to controllers.</li>
+  <li><strong>Middleware:</strong> Handles authentication and cross-cutting concerns.</li>
 </ul>
+
+<p>
+This separation ensures maintainability, scalability, and testability.
+</p>
 
 <hr/>
 
-<h2>Business Rule</h2>
+<h2>6. Database Design</h2>
+
+<h3>6.1 Tables</h3>
+
+<h4>Users Table</h4>
+
+<ul>
+  <li>id (Primary Key, Auto Increment)</li>
+  <li>name (Required)</li>
+  <li>email (Required, Unique)</li>
+  <li>password (Required, Hashed)</li>
+  <li>createdAt</li>
+  <li>updatedAt</li>
+</ul>
+
+<h4>Meetings Table</h4>
+
+<ul>
+  <li>id (Primary Key, Auto Increment)</li>
+  <li>title (Required)</li>
+  <li>startTime (Required)</li>
+  <li>endTime (Required)</li>
+  <li>userId (Foreign Key → Users.id)</li>
+  <li>createdAt</li>
+  <li>updatedAt</li>
+</ul>
+
+<h3>6.2 Relationships</h3>
 
 <p>
-A user cannot create or update a meeting if it overlaps with an existing meeting.
+One-to-Many relationship:
 </p>
+
+<ul>
+  <li>One User can have many Meetings</li>
+  <li>Each Meeting belongs to one User</li>
+</ul>
+
+<h3>6.3 Constraints</h3>
+
+<ul>
+  <li>Email must be unique.</li>
+  <li>Foreign key constraint on userId.</li>
+  <li>startTime must be earlier than endTime.</li>
+  <li>No overlapping time slots for same user.</li>
+</ul>
+
+<h3>6.4 Business Logic Reasoning</h3>
 
 <p>
 Conflict condition:
@@ -106,108 +225,57 @@ If conflict exists, the API returns:
 
 <hr/>
 
-<h2>Authentication Flow</h2>
+<h2>7. API Documentation</h2>
 
-<ol>
-  <li>User registers with name, email, and password.</li>
-  <li>Password is hashed using bcrypt.</li>
-  <li>User logs in and receives a JWT token.</li>
-  <li>Protected routes require Authorization header:</li>
-</ol>
+<h3>7.1 User Routes</h3>
+
+<h4>Register</h4>
 
 <pre>
-Authorization: Bearer &lt;your_token&gt;
+POST /users/register
 </pre>
 
-<p>
-The middleware verifies the token and extracts the user ID securely.
-</p>
-
-<hr/>
-
-<h2>Getting Started</h2>
-
-<h3>1. Clone the Repository</h3>
+Request:
 
 <pre>
-git clone https://github.com/your-username/your-repo-name.git
-cd your-repo-name
+{
+  "name": "John",
+  "email": "john@example.com",
+  "password": "123456"
+}
 </pre>
 
-<h3>2. Install Dependencies</h3>
+Response:
 
 <pre>
-npm install
+{
+  "token": "jwt_token_here",
+  "user": {
+    "id": 1,
+    "name": "John",
+    "email": "john@example.com"
+  }
+}
 </pre>
 
-<h3>3. Create .env File</h3>
-
-<p>Create a file named <strong>.env</strong> in the root directory and add:</p>
+<h4>Login</h4>
 
 <pre>
-PORT=5000
-DB_HOST=localhost
-DB_NAME=your_database_name
-DB_USER=your_database_user
-DB_PASS=your_database_password
-JWT_SECRET=your_secret_key
+POST /users/login
 </pre>
 
-<h3>4. Create PostgreSQL Database</h3>
+<h3>7.2 Meeting Routes</h3>
 
-<p>Make sure PostgreSQL is installed and running.</p>
-
-<p>Create a new database:</p>
-
-<pre>
-CREATE DATABASE your_database_name;
-</pre>
-
-<h3>5. Run the Application</h3>
-
-<pre>
-npm run dev
-</pre>
-
-<p>The server will start at:</p>
-
-<pre>
-http://localhost:5000
-</pre>
-
-<hr/>
-
-<h2>API Endpoints</h2>
-
-<h3>User Routes</h3>
-
-<pre>
-POST   /users/register
-POST   /users/login
-</pre>
-
-<h3>Meeting Routes</h3>
-
-<pre>
-GET    /meetings
-GET    /meetings/:id
-POST   /meetings        (Protected)
-PUT    /meetings/:id    (Protected)
-DELETE /meetings/:id    (Protected)
-</pre>
-
-<hr/>
-
-<h2>Testing the API</h2>
-
-<p>You can use Thunder Client, Postman, or any REST client.</p>
-
-<h4>Example: Create Meeting</h4>
+<h4>Create Meeting (Protected)</h4>
 
 <pre>
 POST /meetings
-Authorization: Bearer &lt;your_token&gt;
+Authorization: Bearer &lt;token&gt;
+</pre>
 
+Request:
+
+<pre>
 {
   "title": "Morning Meeting",
   "startTime": "2026-02-25T09:00:00.000Z",
@@ -215,27 +283,63 @@ Authorization: Bearer &lt;your_token&gt;
 }
 </pre>
 
+Response:
+
+<pre>
+201 Created
+</pre>
+
+<h4>List Meetings</h4>
+
+<pre>
+GET /meetings
+</pre>
+
+<h4>Update Meeting (Protected)</h4>
+
+<pre>
+PUT /meetings/:id
+Authorization: Bearer &lt;token&gt;
+</pre>
+
+<h4>Delete Meeting (Protected)</h4>
+
+<pre>
+DELETE /meetings/:id
+Authorization: Bearer &lt;token&gt;
+</pre>
+
 <hr/>
 
-<h2>Security Improvements</h2>
+<h2>8. Assumptions</h2>
 
 <ul>
-  <li>JWT-based authentication</li>
-  <li>Password hashing with bcrypt</li>
-  <li>User ID extracted from token instead of request body</li>
-  <li>Protected modification routes</li>
+  <li>Each meeting belongs to a single user.</li>
+  <li>Time values are provided in ISO format.</li>
+  <li>Timezone handling is managed by UTC format.</li>
+  <li>No recurring meetings are implemented.</li>
 </ul>
 
 <hr/>
 
-<h2>Future Enhancements</h2>
+<h2>9. Trade-offs</h2>
 
 <ul>
-  <li>Pagination</li>
-  <li>Soft Delete</li>
-  <li>Rate Limiting</li>
-  <li>Logging</li>
-  <li>Unit Testing (Jest)</li>
+  <li>Used sequelize.sync() for simplicity instead of full migration system.</li>
+  <li>JWT access tokens only (no refresh token implementation).</li>
+  <li>Conflict checking handled at application layer instead of DB-level constraints.</li>
+</ul>
+
+<hr/>
+
+<h2>10. Bonus Features Implemented</h2>
+
+<ul>
+  <li>JWT Authentication</li>
+  <li>Password Hashing with Bcrypt</li>
+  <li>Protected Routes via Middleware</li>
+  <li>Secure userId extraction from token</li>
+  <li>Modular Clean Architecture</li>
 </ul>
 
 <hr/>
